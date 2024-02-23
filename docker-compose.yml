@@ -1,0 +1,64 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT}:${DB_PORT}"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./db/mock.sql:/docker-entrypoint-initdb.d/db.sql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  supertokens:
+    image: registry.supertokens.io/supertokens/supertokens-mysql:7.0
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - 3567:3567
+    environment:
+      MYSQL_CONNECTION_URI: mysql://supertokens_user:somePassword@db:3306/supertokens
+    networks:
+      - app_network
+    restart: unless-stopped
+    healthcheck:
+      test: >
+        bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      DB_HOST: mysql
+      DB_PORT: ${DB_PORT}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_NAME: ${DB_NAME}
+      HTTP_HOST: ${HTTP_HOST}
+      HTTP_PORT: ${HTTP_PORT}
+    ports:
+      - "${HTTP_HOST}:${HTTP_PORT}:${HTTP_PORT}"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    links:
+      - mysql
+
+volumes:
+  mysql_data:
+
+networks:
+  app_network:
+    driver: bridge
