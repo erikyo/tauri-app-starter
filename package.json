@@ -6,9 +6,11 @@
     "start:backend": "docker-compose up -d --env-file .env",
     "start:backend-live": "docker-compose up -d --env-file .env.live",
     "start:frontend": "cd app && npm run dev",
-    "start:frontend-live": "cd app && npm run tauri",
+    "start:frontend-app": "cd app && npm run tauri dev",
+    "build:frontend": "cd app && npm run tauri",
     "start": "npm-run-all --parallel start:frontend start:backend",
-    "start-live-app": "npx npm-run-all --parallel start:frontend-live start:backend-live",
+    "start-app": "npm-run-all --parallel start:frontend-app start:backend",
+    "build-app": "npx npm-run-all --parallel build:frontend build:backend",
     "prepare": "husky"
   },
   "keywords": [],

@@ -1,7 +1,8 @@
 import mysql from '@fastify/mysql'
 import fastifyPlugin from 'fastify-plugin'
+import {SERVER} from "../types.js";
 
-const plugin = async (fastify, options) => {
+const plugin = async (fastify: SERVER) => {
   const { config } = fastify
 
   fastify.register(mysql, {
