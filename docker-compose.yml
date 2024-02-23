@@ -20,12 +20,12 @@ services:
   supertokens:
     image: registry.supertokens.io/supertokens/supertokens-mysql:7.0
     depends_on:
-      db:
+      mysql:
         condition: service_healthy
     ports:
       - 3567:3567
     environment:
-      MYSQL_CONNECTION_URI: mysql://supertokens_user:somePassword@db:3306/supertokens
+      MYSQL_CONNECTION_URI: mysql://DB_USER:DB_PASSWORD@mysql:3306/supertokens
     networks:
       - app_network
     restart: unless-stopped
