@@ -5,6 +5,16 @@ import { config } from "dotenv";
 import path from "node:path";
 
 async function serve() {
+  console.log("Running NODE_ENV: " + process.env.NODE_ENV);
+
+  if (process.env.NODE_ENV === "production") {
+    config({ path: path.resolve(".env.production") });
+  } else if (process.env.NODE_ENV === "docker") {
+    config({ path: path.resolve(".env") });
+  } else {
+    config({ path: path.resolve("../.env") });
+  }
+
   // Trigger the application framework to load
   const app = (await appFramework()) as FastifyInstance;
 
@@ -23,12 +33,6 @@ async function serve() {
       app.log.error(error);
       process.exit(1);
     });
-}
-
-if (process.env.NODE_ENV !== "production") {
-  config({ path: path.resolve("../.env") });
-} else {
-  config({ path: path.resolve("./.env.production") });
 }
 
 serve().catch((error) => console.error(error));
