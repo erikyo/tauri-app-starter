@@ -15,7 +15,8 @@ export function boostrap() {
   beforeAll(async () => {
     dotenv.config({ path: path.resolve("../.env.test") });
     app = await fastify();
-    return app.listen();
+    await app.listen();
+    return app;
   });
 
   afterAll(async () => {

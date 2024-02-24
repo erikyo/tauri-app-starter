@@ -15,3 +15,8 @@ COPY .env .
 
 # Copy the rest of the application code
 COPY api .
+
+CMD if [ "$NODE_ENV" = "test" ]; \
+    then npm run tests; \
+    else npm run start; \
+    fi
