@@ -1,30 +1,25 @@
 // This file contains code that we reuse between our tests.
-import fp from "fastify-plugin";
 import fastify from "../src/app.js";
 import { FastifyInstance } from "fastify";
+import * as dotenv from "dotenv";
 
-// Fill in this config with all the configurations
-// needed for testing the application
-export async function config() {
-  return {};
-}
+import path from "node:path";
 
 // Automatically build and tear down our instance
-export function fsBuild() {
+export function boostrap() {
   let app: FastifyInstance;
   // fastify-plugin ensures that all decorators
   // are exposed for testing purposes, this is
   // different from the production setup
 
   beforeAll(async () => {
+    dotenv.config({ path: path.resolve("../.env.test") });
     app = await fastify();
-    // @ts-ignore
-    void app.register(fp(app), await config());
-    await app.ready();
+    return app.listen();
   });
 
   afterAll(async () => {
-    await app.close();
+    return await app.close();
   });
 
   return app;
