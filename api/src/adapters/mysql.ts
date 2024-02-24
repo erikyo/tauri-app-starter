@@ -6,7 +6,7 @@ const plugin = async (fastify: FastifyInstance) => {
   const { config } = fastify;
 
   fastify.register(mysql, {
-    host: config.DB_HOST,
+    host: process.env.NODE_ENV === "docker" ? "mysql" : config.DB_HOST,
     port: config.DB_PORT,
     user: config.DB_USERNAME,
     password: config.DB_PASSWORD,

@@ -29,7 +29,7 @@ function configPlugin(
       },
       servers: [
         {
-          url: "http://localhost:8080/todoapp",
+          url: process.env.HTTP_HOST + ":" + process.env.HTTP_PORT,
         },
       ],
       tags: [

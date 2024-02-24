@@ -4,19 +4,19 @@ FROM node:lts-bullseye-slim
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
-# Copy package.json and package-lock.json to the working directory
-COPY api/package*.json ./
+# copy the .env file
+COPY .env ./
+
+# Copy the rest of the application code
+COPY api/ ./
 
 # Install app dependencies
 RUN npm install
 
-# copy the .env file
-COPY .env .
+# Set the default value for ACTION
+ENV ACTION="start"
 
-# Copy the rest of the application code
-COPY api .
-
+# Set the value of ACTION based on NODE_ENV
 CMD if [ "$NODE_ENV" = "test" ]; \
-    then npm run tests; \
-    else npm run start; \
-    fi
+    then export ACTION="test"; \
+    fi && npm run $ACTION

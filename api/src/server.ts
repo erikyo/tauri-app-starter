@@ -22,7 +22,8 @@ async function serve() {
   return await app
     .listen({
       port: app.config.HTTP_PORT,
-      host: app.config.HTTP_HOST,
+      host:
+        process.env.NODE_ENV === "docker" ? "0.0.0.0" : app.config.HTTP_HOST,
     })
     .then(() => {
       app.log.info(
