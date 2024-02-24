@@ -2,8 +2,9 @@
   "extends": "fastify-tsconfig",
   "compilerOptions": {
     "outDir": "./dist/",                        /* Redirect output structure to the directory. */
-    "rootDir": "src",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
+    "rootDir": "./src",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
     /* Strict Type-Checking Options */
+    "module": "ESNext",
     "strict": false,
     "allowArbitraryExtensions": true,
     /* Enable all strict type checking options. */
@@ -15,9 +16,11 @@
       "node_modules/@types"
     ]
   },
+  "include": [
+    "src",
+    "tests"
+  ],
   "ts-node": {
-    "experimentalSpecifierResolution": "node",
     "transpileOnly": true,
-    "esm": true
   }
 }
