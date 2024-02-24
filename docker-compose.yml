@@ -3,12 +3,15 @@ version: '3'
 services:
   mysql:
     image: mysql:latest
+    env_file:
+      - .env
     environment:
       MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
       MYSQL_DATABASE: ${DB_NAME}
       MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_AUTH_PLUGIN: caching_sha2_password
     ports:
-      - "${DB_PORT}:${DB_PORT}"
+      - "${HTTP_HOST}:${DB_PORT}:${DB_PORT}"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
@@ -23,12 +26,13 @@ services:
       mysql:
         condition: service_healthy
     ports:
-      - 3567:3567
+      - "3567:3567"
     environment:
-      MYSQL_CONNECTION_URI: mysql://DB_USER:DB_PASSWORD@mysql:3306/supertokens
-    networks:
-      - app_network
-    restart: unless-stopped
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_CONNECTION_URI: "mysql://${DB_USERNAME}:${MYSQL_PASSWORD}@mysql:3306/supertokens"
     healthcheck:
       test: >
         bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
@@ -40,25 +44,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env
     environment:
-      DB_HOST: mysql
-      DB_PORT: ${DB_PORT}
-      DB_USERNAME: ${DB_USERNAME}
-      DB_PASSWORD: ${DB_PASSWORD}
-      DB_NAME: ${DB_NAME}
-      HTTP_HOST: ${HTTP_HOST}
-      HTTP_PORT: ${HTTP_PORT}
+      NODE_ENV: docker
     ports:
       - "${HTTP_HOST}:${HTTP_PORT}:${HTTP_PORT}"
+    volumes:
+      - ./api:/usr/src/app
     depends_on:
       mysql:
         condition: service_healthy
-    links:
-      - mysql
+      supertokens:
+        condition: service_healthy
 
 volumes:
   mysql_data:
-
-networks:
-  app_network:
-    driver: bridge

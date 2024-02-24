@@ -2,16 +2,19 @@
 FROM node:lts-bullseye-slim
 
 # Set the working directory in the container
-WORKDIR /usr/src/app/api
+WORKDIR /usr/src/app
 
 # Copy package.json and package-lock.json to the working directory
-COPY package*.json ./
+COPY api/package*.json ./
 
 # Install app dependencies
 RUN npm install
 
-# Bundle app source
-COPY . .
+# copy the .env file
+COPY .env .
+
+# Copy the rest of the application code
+COPY api .
 
 # Command to run the application
 CMD ["npm", "run", "start"]
