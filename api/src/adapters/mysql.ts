@@ -1,9 +1,9 @@
-import mysql from '@fastify/mysql'
-import fastifyPlugin from 'fastify-plugin'
-import {SERVER} from "../types.js";
+import mysql from "@fastify/mysql";
+import fastifyPlugin from "fastify-plugin";
+import { FastifyInstance } from "fastify";
 
-const plugin = async (fastify: SERVER) => {
-  const { config } = fastify
+const plugin = async (fastify: FastifyInstance) => {
+  const { config } = fastify;
 
   fastify.register(mysql, {
     host: config.DB_HOST,
@@ -14,8 +14,8 @@ const plugin = async (fastify: SERVER) => {
     namedPlaceholders: true,
     promise: true,
     connectionLimit: 100,
-    waitForConnections: true
-  })
-}
+    waitForConnections: true,
+  });
+};
 
-export default fastifyPlugin(plugin)
+export default fastifyPlugin(plugin);
