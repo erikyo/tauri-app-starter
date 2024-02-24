@@ -3,16 +3,24 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "start": "docker-compose up -d",
-    "poststart": "npm run start:frontend",
     "postinstall": "(cd api && npm install); (cd app && npm install)",
+    "start": "docker-compose up -d",
+    "start:app": "docker-compose up -d && npm run start:frontend-app",
+    "poststart": "npm run start:backend && npm run start:frontend",
+    "tests": "docker compose --env-file .env.test up",
+    "posttests": "npm-run-all --parallel tests:backend tests:frontend",
+
     "start:backend": "docker-compose up -d --env-file .env",
     "start:frontend": "cd app && npm run dev",
     "start:frontend-app": "cd app && npm run tauri dev",
+
     "build:backend": "cd api && npm run build",
     "build:frontend": "cd app && npm run tauri",
-    "start-app": "npm-run-all --parallel start:frontend-app start:backend",
     "build-app": "npx npm-run-all --parallel build:frontend build:backend",
+
+    "tests:backend": "cd api && npm test",
+    "tests:frontend": "cd app && npm test",
+
     "prepare": "husky"
   },
   "keywords": [],

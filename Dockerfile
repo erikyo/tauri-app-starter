@@ -15,6 +15,3 @@ COPY .env .
 
 # Copy the rest of the application code
 COPY api .
-
-# Command to run the application
-CMD ["npm", "run", "start"]
