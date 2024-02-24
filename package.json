@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "docker-compose up -d",
+    "poststart": "npm run start:frontend",
     "postinstall": "(cd api && npm install); (cd app && npm install)",
     "start:backend": "docker-compose up -d --env-file .env",
     "start:frontend": "cd app && npm run dev",

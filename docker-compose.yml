@@ -14,6 +14,7 @@ services:
       - "${HTTP_HOST}:${DB_PORT}:${DB_PORT}"
     volumes:
       - mysql_data:/var/lib/mysql
+      - ./db/supertokens-init.sql:/docker-entrypoint-initdb.d/supertokens-init.sql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
