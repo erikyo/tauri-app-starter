@@ -5,19 +5,6 @@ import {
   type MySQLPromisePool,
 } from "@fastify/mysql";
 
-/**
- * @see https://github.com/fastify/fastify-mysql
- */
-declare module "fastify" {
-  interface FastifyInstance {
-    mysql:
-      | MySQLPool // if you only pass connectionString
-      | MySQLConnection // if you passed type = 'connection'
-      | MySQLPromisePool // if you passed promise = true
-      | MySQLPromiseConnection; // if you passed promise = true, type = 'connection'
-  }
-}
-
 type ENV = {
   DB_HOST: string;
   DB_PORT: number;
@@ -30,6 +17,9 @@ type ENV = {
   CORS_ORIGIN_URL: string;
 };
 
+/**
+ * @see https://github.com/fastify/fastify-mysql
+ */
 declare module "fastify" {
   interface FastifyInstance {
     config: ENV;

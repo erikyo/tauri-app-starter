@@ -7,18 +7,20 @@ import swaggerUi from "./plugins/swagger-ui.js";
 import db from "./adapters/mysql.js";
 
 import routes from "./routes/index.js";
+import todoRoutes from "./routes/todo.js";
 
 export default async function appFramework(): Promise<FastifyInstance> {
   return (
     Fastify({ logger: true })
       .register(config)
-      .register(swagger)
-      .register(swaggerUi)
       .register(auth)
       .register(db)
 
       // Register Routes
       .register(routes)
+      .register(todoRoutes)
+      .register(swagger)
+      .register(swaggerUi)
 
       .ready()
   );
