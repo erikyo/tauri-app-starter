@@ -2,12 +2,14 @@
 
 The backend Rest Api is powered by Fastify and the frontend is an app built with Tauri.
 
-We are going to use:
+With the docker compose setup you can run the following:
 
-- mysql database to store the data (docker).
-- Supertokens as Auth provider
-- Tauri and Vite to build the frontend app
-- Fastify to build the rest api
+- A mysql database to store the data (port 3306).
+- Supertokens as Auth provider (port 3567)
+- Tauri and Vite to build the frontend app (port 3000)
+- Fastify to build the rest api (port 3001)
+
+## Dependencies
 - Typescript to build the codebase
 - Docker to run the backend server and serve the api
 
@@ -44,7 +46,7 @@ docker run -p 3567:3567 -d registry.supertokens.io/supertokens/supertokens-mysql
 - Start the Api server with the command
 
 ```bash
-  npm run start
+  npm run start:backend
 ```
 
 #### UI 
@@ -52,11 +54,11 @@ docker run -p 3567:3567 -d registry.supertokens.io/supertokens/supertokens-mysql
 - Start the UI server with the command
 
 ```bash
-  npm run dev
+  npm run start:frontend
 ```
 
+## Build the app
 
-## Notes:
-
-- if you run the Api on Docker, you need to update the Api Host to "127.0.0.1" for localhost and "0.0.0.0" with docker
-
+```bash
+  npm run build-app
+```
