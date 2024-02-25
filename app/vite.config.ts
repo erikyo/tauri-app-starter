@@ -18,4 +18,6 @@ export default defineConfig(async () => ({
       ignored: ["**/src-tauri/**"],
     },
   },
+  envDir: "../",
+  envPrefix: "HTTP_",
 }));
