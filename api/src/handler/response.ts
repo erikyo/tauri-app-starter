@@ -3,7 +3,7 @@ import {
   ResponseInterface,
   SuccessInterface,
 } from "../model/types.js";
-import { ApiError } from "../model/error.schema.js";
+import { ApiError } from "../schema/error.schema.js";
 
 const setFormatError = (code: number, message: string): ErrorInterface => {
   return {
