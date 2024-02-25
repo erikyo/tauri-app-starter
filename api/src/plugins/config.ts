@@ -6,7 +6,6 @@ export const schema = {
   type: "object",
   required: [
     "DB_HOST",
-    "DB_SOCKET",
     "DB_PORT",
     "DB_USERNAME",
     "DB_PASSWORD",
@@ -14,8 +13,6 @@ export const schema = {
 
     "HTTP_HOST",
     "HTTP_PORT",
-
-    "CORS_ORIGIN_URL",
 
     "SUPERTOKENS_CONNECTION_URI",
     "SUPERTOKENS_API_KEY",
@@ -43,10 +40,7 @@ export const schema = {
     DB_NAME: {
       type: "string",
     },
-    DB_SOCKET: {
-      type: "string",
-      default: "/tmp/mysql.sock",
-    },
+
     HTTP_PORT: {
       type: "number",
       default: 3001,
@@ -55,9 +49,7 @@ export const schema = {
       type: "string",
       default: "0.0.0.0",
     },
-    CORS_ORIGIN_URL: {
-      type: "string",
-    },
+
     SUPERTOKENS_CONNECTION_URI: {
       type: "string",
     },
