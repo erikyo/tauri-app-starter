@@ -1,5 +1,7 @@
 import fastifyPlugin from "fastify-plugin";
 import { FastifyInstance } from "fastify";
+import { todoSchema } from "../schema/todo.schema.js";
+import { errorSchema } from "../schema/error.schema.js";
 
 import fastifySwagger, { SwaggerOptions } from "@fastify/swagger";
 import { schema } from "../schema.js";
@@ -17,6 +19,8 @@ function configPlugin(
   done: () => void,
 ) {
   options = schema;
+  fastify.addSchema(todoSchema);
+  fastify.addSchema(errorSchema);
   return fastifySwagger(fastify, options, done);
 }
 

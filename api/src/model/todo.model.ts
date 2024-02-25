@@ -1,7 +1,11 @@
 import { FastifyInstance } from "fastify";
 import { MySQLPromisePool } from "@fastify/mysql";
-import { Todo } from "./todoSchema.js";
-import { ErrorMsg } from "./error.schema.js";
+import { Todo } from "../schema/todo.schema.js";
+import { ErrorMsg } from "../schema/error.schema.js";
+
+export function throwError(code: number, message: string): ErrorMsg {
+  return { code, message };
+}
 
 export default class TodoModel {
   private static instance: TodoModel;
@@ -22,15 +26,11 @@ export default class TodoModel {
     return await (this.mysql as MySQLPromisePool).getConnection();
   }
 
-  public throwError(code: number, message: string): ErrorMsg {
-    return { code, message };
-  }
-
   public async findAllTodo(): Promise<Todo[] | ErrorMsg> {
     const connection = await this.getConnection();
     const [rows] = await connection.query("SELECT * FROM todo");
     connection.release();
     const todoList = rows as Todo[];
-    return todoList.length ? todoList : this.throwError(400, "No todo found");
+    return todoList.length ? todoList : throwError(400, "No todo found");
   }
 }

@@ -1,5 +1,5 @@
 import Joi from "joi";
-import { Todo } from "./todoSchema.js";
+import { Todo } from "./todo.schema.js";
 
 export const TodoValidationSchema = {
   schema: {

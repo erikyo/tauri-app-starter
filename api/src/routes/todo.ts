@@ -3,15 +3,11 @@ import responseHandler from "../handler/handler.js";
 import fastifyPlugin from "fastify-plugin";
 import TodoModel from "../model/todo.model.js";
 import { MySQLPromisePool } from "@fastify/mysql";
-import { TodoValidationSchema } from "../model/todo.validation.js";
+import { TodoValidationSchema } from "../schema/todo.validation.js";
 
-import { todoSchema } from "../model/todoSchema.js";
-import { errorSchema } from "../model/error.schema.js";
 const prefix = "/task";
 
 async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
-  fastify.addSchema(todoSchema);
-  fastify.addSchema(errorSchema);
   /**
    * Route for getting all todos
    */

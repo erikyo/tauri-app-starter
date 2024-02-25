@@ -40,13 +40,6 @@ export const schema = {
             },
             default: {
               description: "Generic error response",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Error",
-                  },
-                },
-              },
             },
           },
         },
@@ -59,26 +52,9 @@ export const schema = {
           responses: {
             "200": {
               description: "List of all tasks",
-              content: {
-                application: {
-                  schema: {
-                    type: "array",
-                    items: {
-                      $ref: "#/components/schemas/Task",
-                    },
-                  },
-                },
-              },
             },
             default: {
               description: "Generic error response",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Error",
-                  },
-                },
-              },
             },
           },
         },
@@ -86,35 +62,12 @@ export const schema = {
           tags: ["task"],
           summary: "Create a new task",
           operationId: "tasksCreate",
-          requestBody: {
-            content: {
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/Task",
-                },
-              },
-            },
-          },
           responses: {
             "200": {
               description: "The created task",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Task",
-                  },
-                },
-              },
             },
             default: {
               description: "Generic error response",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Error",
-                  },
-                },
-              },
             },
           },
         },
@@ -139,23 +92,9 @@ export const schema = {
           responses: {
             "200": {
               description: "Ok",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Task",
-                  },
-                },
-              },
             },
             default: {
               description: "Generic error response",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Error",
-                  },
-                },
-              },
             },
           },
         },
@@ -163,35 +102,12 @@ export const schema = {
           tags: ["task"],
           summary: "Update an existing task",
           operationId: "tasksUpdate",
-          requestBody: {
-            content: {
-              "application/json": {
-                schema: {
-                  $ref: "#/components/schemas/Task",
-                },
-              },
-            },
-          },
           responses: {
             "200": {
               description: "The updated task",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Task",
-                  },
-                },
-              },
             },
             default: {
               description: "Generic error response",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Error",
-                  },
-                },
-              },
             },
           },
         },
@@ -205,13 +121,6 @@ export const schema = {
             },
             default: {
               description: "Generic error response",
-              content: {
-                "application/json": {
-                  schema: {
-                    $ref: "#/components/schemas/Error",
-                  },
-                },
-              },
             },
           },
         },

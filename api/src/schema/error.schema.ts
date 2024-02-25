@@ -17,7 +17,7 @@ export const errorSchema = {
       format: "int32",
       description: "Error code that identify of the error",
       type: "integer",
-      example: "1000",
+      example: "200",
     },
     message: {
       description: "Short description of the error",
