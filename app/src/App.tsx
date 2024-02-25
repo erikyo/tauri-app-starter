@@ -11,7 +11,7 @@ SuperTokens.init(SuperTokensConfig);
 
 function App() {
   return (
-    <div className="flex justify-center items-center my-16 p-4">
+    <div className="flex justify-center items-center p-4">
       <div className="mx-auto w-full">
         <SuperTokensWrapper>
           <Router>
