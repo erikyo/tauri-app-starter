@@ -1,36 +1,26 @@
-import { FastifyInstance } from "fastify";
-import { MySQLPromisePool } from "@fastify/mysql";
 import { Todo } from "../schema/todo.schema.js";
 import { ErrorMsg } from "../schema/error.schema.js";
+import { MySqlConnection } from "../adapters/connection.js";
 
 export function throwError(code: number, message: string): ErrorMsg {
   return { code, message };
 }
 
 export default class TodoModel {
-  private static instance: TodoModel;
-  private mysql: MySQLPromisePool;
+  private static instance: TodoModel | null = null;
 
-  constructor(fastify: FastifyInstance) {
-    this.mysql = fastify.mysql as MySQLPromisePool;
-  }
-
-  public static async getInstance(fastify: FastifyInstance) {
+  public static getInstance() {
     if (!TodoModel.instance) {
-      TodoModel.instance = new TodoModel(fastify);
+      TodoModel.instance = new TodoModel();
     }
     return TodoModel.instance;
   }
 
-  private async getConnection() {
-    return await (this.mysql as MySQLPromisePool).getConnection();
-  }
-
   public async findAllTodo(): Promise<Todo[] | ErrorMsg> {
-    const connection = await this.getConnection();
-    const [rows] = await connection.query("SELECT * FROM todo");
-    connection.release();
-    const todoList = rows as Todo[];
-    return todoList.length ? todoList : throwError(400, "No todo found");
+    await MySqlConnection.connect();
+    const res = await MySqlConnection.query("SELECT * FROM todo");
+    console.log(res);
+    MySqlConnection.release();
+    return res.rows as Todo[];
   }
 }
