@@ -15,6 +15,7 @@ import {
   plugin,
   errorHandler,
 } from "supertokens-node/framework/fastify/index.js";
+
 import { type TypeInput } from "supertokens-node/types";
 
 async function auth(server, options) {
@@ -101,9 +102,10 @@ async function auth(server, options) {
   server.register(cors, {
     origin: server.config.SUPERTOKENS_WEBSITE_DOMAIN,
     allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
-    methods: ["GET", "PUT", "POST", "DELETE"],
+    methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     credentials: true,
   });
+
   server.register(formDataPlugin);
 
   server.register(plugin);
