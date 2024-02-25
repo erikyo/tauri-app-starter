@@ -6,12 +6,8 @@ With the docker compose setup you can run the following:
 
 - A mysql database to store the data (port 3306).
 - Supertokens as Auth provider (port 3567)
-- Tauri and Vite to build the frontend app (port 3000)
-- Fastify to build the rest api (port 3001)
-
-## Dependencies
-- Typescript to build the codebase
-- Docker to run the backend server and serve the api
+- Frontend app with Tauri and Vite (port 3000)
+- Fastify rest api (port 3001)
 
 # Requirements
 
