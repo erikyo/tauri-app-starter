@@ -1,7 +1,5 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import responseHandler from "../handler/handler.js";
+import { FastifyInstance, FastifyPluginOptions, FastifyReply } from "fastify";
 import fastifyPlugin from "fastify-plugin";
-import TodoModel from "../model/todo.model.js";
 import { MySQLPromisePool } from "@fastify/mysql";
 import { Todo } from "../schema/todo.schema.js";
 import { TodoValidationSchema } from "../schema/todo.validation.js";
@@ -23,8 +21,14 @@ async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
 
   fastify.post(prefix, TodoValidationSchema, async (req, reply) => {
     const todo = req.body as Todo;
-    const [rows] = await connection.query("INSERT INTO todo SET ?", todo);
-    return rows;
+    const result = await connection.query("INSERT INTO todo SET ?", [todo]);
+    return (
+      result[0] as {
+        fieldCount: number;
+        affectedRows: number;
+        insertId: number;
+      }
+    ).insertId;
   });
 
   fastify.get(`${prefix}/:id`, async (req, reply) => {
