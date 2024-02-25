@@ -1,22 +1,22 @@
-import {TodoModel} from "./todo.schema.js";
+import { Todo } from "./todoSchema.js";
 
 interface dataInterface {
-    code: number
-    message: string
+  code: number;
+  message: string;
 }
 
-export interface SuccessInterface {
-    success: dataInterface
+export interface SuccessInterface extends dataInterface {
+  success: dataInterface;
 }
 
-export interface ErrorInterface {
-    error: dataInterface
+export interface ErrorInterface extends dataInterface {
+  error: dataInterface;
 }
 
 export type ResponseInterface =
-    | String
-    | Error
-    | SuccessInterface
-    | ErrorInterface
-    | TodoModel
-    | TodoModel[]
+  | String
+  | Error
+  | SuccessInterface
+  | ErrorInterface
+  | Todo
+  | Todo[];
