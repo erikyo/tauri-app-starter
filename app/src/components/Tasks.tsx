@@ -9,19 +9,22 @@ export default function Tasks() {
     task_content: "",
   });
   const env = import.meta.env;
-  const apiUrl = "http://" + env.HTTP_HOST + ":" + env.HTTP_PORT;
+  const apiUrl = env.HTTP_PROTOCOL + env.HTTP_HOST + ":" + env.HTTP_PORT;
   const taskEndPoint = apiUrl + "/task";
 
-  useEffect(() => {
+  function getTasks() {
     axios.get(taskEndPoint).then(({ data }) => {
-      console.log(data);
       if (data && typeof data === "object") setTasks(data);
     });
-  }, []);
+  }
 
   function resetTask() {
     setTask({ task_content: "", task_name: "", completed: false });
   }
+
+  useEffect(() => {
+    getTasks();
+  }, []);
 
   function addTask(props: Task) {
     const newTask = {
@@ -29,11 +32,12 @@ export default function Tasks() {
       task_content: props.task_content,
     };
     axios
-      .post(taskEndPoint, newTask)
+      .put(taskEndPoint, newTask)
       .then((resp) => {
-        if (resp && typeof resp === "object" && "id" in resp)
+        if (resp && typeof resp === "object" && "id" in resp) {
           setTasks([...tasks, { id: resp.id, ...newTask } as Task]);
-        resetTask();
+          resetTask();
+        }
       })
       .catch((err) => {
         console.log(err);
@@ -41,17 +45,16 @@ export default function Tasks() {
   }
 
   function deleteTask(id: number) {
-    axios.delete(taskEndPoint + id).then((resp) => {
+    axios.delete(taskEndPoint + "/" + id).then((resp) => {
       if (resp) {
-        setTasks(tasks.filter((task) => task.id !== id));
+        const newTasks = tasks.filter((task) => task.id !== id);
+        setTasks(newTasks);
       }
     });
-    const newTasks = tasks.filter((task) => task.id !== id);
-    setTasks(newTasks);
   }
 
   function toggleCompleted(id: number) {
-    axios.post(taskEndPoint + id);
+    axios.patch(taskEndPoint + "/" + id);
     const newTasks = tasks.map((task) => {
       if (task.id === id) {
         return { ...task, completed: !task.completed };
