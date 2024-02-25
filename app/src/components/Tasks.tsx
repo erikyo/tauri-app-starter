@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { Task } from "./Task.tsx";
 import { Form } from "./Form.tsx";
 import axios from "axios";
-
 export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [task, setTask] = useState<Task>({
@@ -10,14 +9,14 @@ export default function Tasks() {
     task_content: "",
   });
   const env = import.meta.env;
+  const apiUrl = "http://" + env.HTTP_HOST + ":" + env.HTTP_PORT;
+  const taskEndPoint = apiUrl + "/task";
 
   useEffect(() => {
-    axios
-      .get("http://" + env.HTTP_HOST + ":" + env.HTTP_PORT + "/task")
-      .then(({ data }) => {
-        console.log(data);
-        if (data && typeof data === "object") setTasks(data);
-      });
+    axios.get(taskEndPoint).then(({ data }) => {
+      console.log(data);
+      if (data && typeof data === "object") setTasks(data);
+    });
   }, []);
 
   function resetTask() {
@@ -26,27 +25,40 @@ export default function Tasks() {
 
   function addTask(props: Task) {
     const newTask = {
-      id: tasks.length + 1,
       task_name: props.task_name,
       task_content: props.task_content,
     };
-    setTasks([...tasks, newTask]);
-    resetTask();
+    axios
+      .post(taskEndPoint, newTask)
+      .then((resp) => {
+        if (resp && typeof resp === "object" && "id" in resp)
+          setTasks([...tasks, { id: resp.id, ...newTask } as Task]);
+        resetTask();
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   }
 
   function deleteTask(id: number) {
-    setTasks(tasks.filter((task) => task.id !== id));
+    axios.delete(taskEndPoint + id).then((resp) => {
+      if (resp) {
+        setTasks(tasks.filter((task) => task.id !== id));
+      }
+    });
+    const newTasks = tasks.filter((task) => task.id !== id);
+    setTasks(newTasks);
   }
 
   function toggleCompleted(id: number) {
-    setTasks(
-      tasks.map((task) => {
-        if (task.id === id) {
-          return { ...task, completed: !task.completed };
-        }
-        return task;
-      }),
-    );
+    axios.post(taskEndPoint + id);
+    const newTasks = tasks.map((task) => {
+      if (task.id === id) {
+        return { ...task, completed: !task.completed };
+      }
+      return task;
+    });
+    setTasks(newTasks);
   }
 
   return (
