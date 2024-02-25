@@ -18,6 +18,7 @@ export const schema = {
     servers: [
       {
         url: apiServerUrl,
+        description: "Development server",
       },
     ],
     tags: [
@@ -58,7 +59,31 @@ export const schema = {
             },
           },
         },
-        post: {
+        put: {
+          parameters: [
+            {
+              name: "task",
+              in: "body",
+              description: "The new task",
+              required: true,
+              schema: {
+                type: "object",
+                required: ["task_name", "task_content"],
+                properties: {
+                  task_name: {
+                    type: "string",
+                    description: "The name of the task",
+                    example: "Task Name",
+                  },
+                  task_content: {
+                    type: "string",
+                    description: "The content of the task",
+                    example: "Task Content",
+                  },
+                },
+              },
+            },
+          ],
           tags: ["task"],
           summary: "Create a new task",
           operationId: "tasksCreate",
@@ -77,12 +102,10 @@ export const schema = {
           {
             name: "taskId",
             in: "path",
+            type: "number",
             description: "The id of the task",
             required: true,
-            schema: {
-              type: "string",
-            },
-            example: "15",
+            example: 15,
           },
         ],
         get: {
@@ -91,23 +114,79 @@ export const schema = {
           operationId: "tasksRead",
           responses: {
             "200": {
-              description: "Ok",
+              description: "The requested task",
+              examples: {
+                description: "Task with id 15",
+                value: 15,
+              },
+              schema: {
+                type: "object",
+                properties: {
+                  task_id: {
+                    type: "number",
+                    description: "The id of the task",
+                    example: 15,
+                  },
+                  task_name: {
+                    type: "string",
+                    description: "The name of the task",
+                    example: "Task Name",
+                  },
+                  task_content: {
+                    type: "string",
+                    description: "The content of the task",
+                    example: "Task Content",
+                  },
+                },
+              },
             },
             default: {
               description: "Generic error response",
             },
           },
         },
-        put: {
+        patch: {
           tags: ["task"],
           summary: "Update an existing task",
           operationId: "tasksUpdate",
+          parameters: [
+            {
+              name: "task",
+              in: "body",
+              description: "The updated task",
+              required: true,
+              schema: {
+                type: "object",
+                required: ["task_name", "task_content"],
+                properties: {
+                  task_name: {
+                    type: "string",
+                    description: "The name of the task",
+                    example: "Task Name",
+                  },
+                  task_content: {
+                    type: "string",
+                    description: "The content of the task",
+                    example: "Task Content",
+                  },
+                },
+              },
+            },
+          ],
           responses: {
             "200": {
               description: "The updated task",
+              schema: {
+                type: "number",
+                example: 15,
+                description: "The id of the task updated",
+              },
             },
             default: {
               description: "Generic error response",
+            },
+            "400": {
+              description: "Bad Request",
             },
           },
         },
@@ -151,11 +230,6 @@ export const schema = {
             },
           },
         },
-      },
-    },
-    refResolver: {
-      buildLocalReference(json, baseUri, fragment, i) {
-        return json.$id || `id-${i}`;
       },
     },
   },
