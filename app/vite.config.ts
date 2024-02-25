@@ -19,5 +19,5 @@ export default defineConfig(async () => ({
     },
   },
   envDir: "../",
-  envPrefix: "HTTP_",
+  envPrefix: ["HTTP_", "SUPERTOKENS_APPNAME"],
 }));
