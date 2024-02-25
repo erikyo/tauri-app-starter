@@ -7,9 +7,6 @@ WORKDIR /usr/src/app
 # copy the .env file
 COPY .env ./
 
-# Copy the rest of the application code
-COPY api/ ./
-
 # Install app dependencies
 RUN npm install
 
