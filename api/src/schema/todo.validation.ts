@@ -8,7 +8,9 @@ export const TodoValidationSchema = {
         id: Joi.number(),
         task_name: Joi.string().required(),
         task_content: Joi.string().required(),
-        completed: Joi.boolean(),
+        completed: Joi.boolean().valid(1, 0),
+        creation_date: Joi.date(),
+        modification_date: Joi.date(),
       })
       .required(),
   },

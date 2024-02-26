@@ -25,11 +25,6 @@ async function serve() {
       host:
         process.env.NODE_ENV === "docker" ? "0.0.0.0" : app.config.HTTP_HOST,
     })
-    .then(() => {
-      app.log.info(
-        `Server listening on ${app.config.HTTP_HOST}:${app.config.HTTP_PORT}`,
-      );
-    })
     .catch((error) => {
       app.log.error(error);
       process.exit(1);

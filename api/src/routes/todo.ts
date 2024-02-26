@@ -70,7 +70,7 @@ async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
             affectedRows: number;
             insertId: number;
           }
-        ).affectedRows > 1
+        ).affectedRows > 0
       );
     },
   );
