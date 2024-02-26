@@ -1,11 +1,14 @@
 # Use an official Node.js runtime as a parent image
 FROM node:lts-bullseye-slim
 
+# copy the .env file
+COPY .env ./
+
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
 # copy the .env file
-COPY .env ./
+COPY ./api .
 
 # Install app dependencies
 RUN npm install

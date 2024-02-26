@@ -11,16 +11,16 @@ async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
   const connection = await (fastify.mysql as MySQLPromisePool).getConnection();
 
   /**
-   * Route for getting all todos
+   * Route for getting all tasks
    */
   fastify.get(prefix, { preHandler: sessionHandler }, async (req, res) => {
-    /**
-     * The TodoModel instance
-     */
     const result = await connection.query("SELECT * FROM todo");
     return result[0] as Todo[];
   });
 
+  /**
+   * Route for creating a task
+   */
   fastify.put(prefix, { preHandler: sessionHandler }, async (req, reply) => {
     const todo = req.body as Todo;
     const result = await connection.query("INSERT INTO todo SET ?", [todo]);
@@ -33,52 +33,70 @@ async function routes(fastify: FastifyInstance, options: FastifyPluginOptions) {
     ).insertId;
   });
 
+  /**
+   * Route for getting a task by its id
+   */
   fastify.get(
     `${prefix}/:id`,
     { preHandler: sessionHandler },
     async (req, reply) => {
-      const id = (req.params as { id: string }).id;
-      const [rows] = await connection.query(
-        "SELECT * FROM todo WHERE id = ? LIMIT 1",
+      const id = Number((req.params as { id: any }).id);
+      console.log(id);
+      const [rows] = await connection.query("SELECT * FROM todo WHERE id = ?", [
         id,
-      );
+      ]);
+      console.log(rows);
       return rows[0] as Todo;
     },
   );
 
+  /**
+   * Route for updating a task
+   */
   fastify.patch(
     `${prefix}/:id`,
-    { ...TodoValidationSchema },
+    { preHandler: sessionHandler, ...TodoValidationSchema },
     async (req, reply) => {
-      const id = (req.params as { id: string }).id;
+      const id = Number((req.params as { id: any }).id);
       const todo = req.body as Todo;
       const result = await connection.query("UPDATE todo SET ? WHERE id = ?", [
         todo,
         id,
       ]);
       return (
-        result[0] as {
-          fieldCount: number;
-          affectedRows: number;
-          insertId: number;
-        }
-      ).insertId;
+        (
+          result[0] as {
+            fieldCount: number;
+            affectedRows: number;
+            insertId: number;
+          }
+        ).affectedRows > 1
+      );
     },
   );
 
-  fastify.delete(`${prefix}/:id`, async (req, reply) => {
-    const id = (req.params as { id: string }).id;
-    const result = await connection.query("DELETE FROM todo WHERE id = ?", id);
-    return (
-      (
-        result[0] as {
-          fieldCount: number;
-          affectedRows: number;
-          insertId: number;
-        }
-      ).affectedRows > 0
-    );
-  });
+  /**
+   * Route for deleting a task
+   */
+  fastify.delete(
+    `${prefix}/:id`,
+    { preHandler: sessionHandler },
+    async (req, reply) => {
+      const id = Number((req.params as { id: any }).id);
+      const result = await connection.query("DELETE FROM todo WHERE id = ?", [
+        id,
+      ]);
+      return (
+        (
+          result[0] as {
+            fieldCount: number;
+            affectedRows: number;
+            insertId: number;
+          }
+        ).affectedRows > 0
+      );
+    },
+  );
 
   connection.release();
 }
