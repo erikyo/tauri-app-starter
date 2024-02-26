@@ -1,21 +1,29 @@
 import { useEffect, useState } from "react";
 import { Task } from "./Task.tsx";
 import { Form } from "./Form.tsx";
-import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import { addNewTask, deleteTask, getTasks, updateTask } from "../utils/api.ts";
+
 export default function Tasks() {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [task, setTask] = useState<Task>({
+    id: undefined,
     task_name: "",
     task_content: "",
+    completed: false,
   });
-  const env = import.meta.env;
-  const apiUrl = env.HTTP_PROTOCOL + env.HTTP_HOST + ":" + env.HTTP_PORT;
-  const taskEndPoint = apiUrl + "/task";
 
-  function getTasks() {
-    axios.get(taskEndPoint).then(({ data }) => {
-      if (data && typeof data === "object") setTasks(data);
-    });
+  function updateTasks() {
+    getTasks()
+      .then(({ data }) => {
+        if (data && typeof data === "object") setTasks(data);
+      })
+      .catch(() => {
+        toast("Server is down!");
+      })
+      .finally(() => {
+        toast("Server is up!");
+      });
   }
 
   function resetTask() {
@@ -23,19 +31,19 @@ export default function Tasks() {
   }
 
   useEffect(() => {
-    getTasks();
+    updateTasks();
   }, []);
 
   function addTask(props: Task) {
-    const newTask = {
-      task_name: props.task_name,
-      task_content: props.task_content,
-    };
-    axios
-      .put(taskEndPoint, newTask)
+    const query =
+      "id" in props && typeof props.id === "number"
+        ? updateTask(props)
+        : addNewTask(props);
+
+    query
       .then((resp) => {
         if (resp && typeof resp === "object" && "id" in resp) {
-          setTasks([...tasks, { id: resp.id, ...newTask } as Task]);
+          setTasks([...tasks, { id: resp.id, ...props } as Task]);
           resetTask();
         }
       })
@@ -44,8 +52,8 @@ export default function Tasks() {
       });
   }
 
-  function deleteTask(id: number) {
-    axios.delete(taskEndPoint + "/" + id).then((resp) => {
+  function removeTask(id: number) {
+    deleteTask(id).then((resp) => {
       if (resp) {
         const newTasks = tasks.filter((task) => task.id !== id);
         setTasks(newTasks);
@@ -54,14 +62,26 @@ export default function Tasks() {
   }
 
   function toggleCompleted(id: number) {
-    axios.patch(taskEndPoint + "/" + id);
-    const newTasks = tasks.map((task) => {
-      if (task.id === id) {
-        return { ...task, completed: !task.completed };
+    updateTask({ ...task, completed: !task.completed }).then((resp) => {
+      if (resp) {
+        const newTasks = tasks.map((task) => {
+          if (task.id === id) {
+            return { ...task, completed: !task.completed };
+          }
+          return task;
+        });
+        setTasks(newTasks);
+      } else {
+        updateTasks();
       }
-      return task;
     });
-    setTasks(newTasks);
+  }
+
+  function editTask(id: number) {
+    const taskToEdit = tasks.find((task) => task.id === id);
+    if (taskToEdit) {
+      setTask(taskToEdit);
+    }
   }
 
   return (
@@ -72,11 +92,13 @@ export default function Tasks() {
           <Task
             key={task.id}
             task={task}
-            deleteTask={deleteTask}
+            deleteTask={removeTask}
+            editTask={editTask}
             toggleCompleted={toggleCompleted}
           />
         ))}
       </ul>
+      <ToastContainer />
     </div>
   );
 }

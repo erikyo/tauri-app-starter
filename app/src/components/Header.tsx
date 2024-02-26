@@ -1,7 +1,10 @@
 import { Link } from "react-router-dom";
 import { signOut } from "supertokens-auth-react/recipe/thirdpartyemailpassword";
+import Session from "supertokens-auth-react/recipe/session";
 
 export function Header() {
+  const session = Session.getAccessToken();
+
   async function onLogout() {
     await signOut();
     window.location.href = "/";
@@ -12,14 +15,14 @@ export function Header() {
         <Link
           to={"http://localhost:3001/auth/dashboard"}
           className={
-            "btn inline-block bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white my-2 mr-3 py-1 px-2 rounded"
+            "btn bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white my-2 mr-3 p-1 rounded-full"
           }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            height="24px"
+            height="20px"
             viewBox="0 0 24 24"
-            width="24px"
+            width="20px"
             fill="#ffffff"
           >
             <path d="M0 0h24v24H0z" fill="none" />
@@ -29,14 +32,14 @@ export function Header() {
         <button
           onClick={onLogout}
           className={
-            "btn bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white my-2 mr-3 py-1 px-2 rounded"
+            "btn bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white my-2 mr-3 p-1 rounded-full"
           }
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            height="24px"
+            height="20px"
             viewBox="0 0 24 24"
-            width="24px"
+            width="20px"
             fill="#ffffff"
           >
             <path d="M0 0h24v24H0z" fill="none" />
@@ -44,7 +47,7 @@ export function Header() {
           </svg>
         </button>
       </div>
-      <h1 className="text-gray-800 font-bold text-5xl text-center mt-10">
+      <h1 className="text-gray-800 font-bold text-4xl text-center my-4">
         Todo App
       </h1>
     </div>
