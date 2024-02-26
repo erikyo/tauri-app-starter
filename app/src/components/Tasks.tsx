@@ -42,8 +42,15 @@ export default function Tasks() {
 
     query
       .then((resp) => {
-        if (resp && typeof resp === "object" && "id" in resp) {
-          setTasks([...tasks, { id: resp.id, ...props } as Task]);
+        if (resp && resp) {
+          // find the task with the same id and replace it
+          const newTasks = tasks.map((task) => {
+            if (task.id === props.id) {
+              return props;
+            }
+            return task;
+          });
+          setTasks(newTasks);
           resetTask();
         }
       })
@@ -62,7 +69,10 @@ export default function Tasks() {
   }
 
   function toggleCompleted(id: number) {
-    updateTask({ ...task, completed: !task.completed }).then((resp) => {
+    updateTask({
+      ...task,
+      completed: task.completed,
+    }).then((resp) => {
       if (resp) {
         const newTasks = tasks.map((task) => {
           if (task.id === id) {
@@ -98,7 +108,14 @@ export default function Tasks() {
           />
         ))}
       </ul>
-      <ToastContainer />
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        closeOnClick
+        pauseOnFocusLoss
+        pauseOnHover
+        theme="dark"
+      />
     </div>
   );
 }

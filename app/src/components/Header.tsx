@@ -1,10 +1,6 @@
 import { Link } from "react-router-dom";
 import { signOut } from "supertokens-auth-react/recipe/thirdpartyemailpassword";
-import Session from "supertokens-auth-react/recipe/session";
-
 export function Header() {
-  const session = Session.getAccessToken();
-
   async function onLogout() {
     await signOut();
     window.location.href = "/";
