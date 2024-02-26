@@ -1,17 +1,20 @@
 # Use an official Node.js runtime as a parent image
 FROM node:lts-bullseye-slim
 
-# copy the .env file
-COPY .env ./
-
 # Set the working directory in the container
 WORKDIR /usr/src/app
 
 # copy the .env file
-COPY ./api .
+COPY .env ./
+
+# copy the src folder
+COPY ./api/src/ ./src/
+
+# copy the src folder
+COPY ./*.json ./
 
 # Install app dependencies
-RUN npm install
+RUN npm ci
 
 # Set the default value for ACTION
 ENV ACTION="start"
