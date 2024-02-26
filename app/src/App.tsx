@@ -24,8 +24,10 @@ function App() {
                 path="/"
                 element={
                   <SessionAuth>
-                    <Header />
-                    <Tasks />
+                    <>
+                      <Header />
+                      <Tasks />
+                    </>
                   </SessionAuth>
                 }
               />

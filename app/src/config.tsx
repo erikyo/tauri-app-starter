@@ -23,7 +23,7 @@ export function getWebsiteDomain() {
 
 export const SuperTokensConfig = {
   appInfo: {
-    appName: import.meta.env.SUPERTOKENS_APPNAME || "Demo App", // TODO: LOAD ENV VARS
+    appName: import.meta.env.SUPERTOKENS_APPNAME,
     apiDomain: getApiDomain(),
     websiteDomain: getWebsiteDomain(),
   },
