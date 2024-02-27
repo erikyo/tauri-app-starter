@@ -2,15 +2,15 @@ import mysql from "@fastify/mysql";
 import fastifyPlugin from "fastify-plugin";
 import { FastifyInstance } from "fastify";
 
-const plugin = async (fastify: FastifyInstance) => {
-  const { config } = fastify;
+const plugin = async (fastify: FastifyInstance, options: any) => {
+  const { config } = fastify as any;
 
   fastify.register(mysql, {
-    host: process.env.NODE_ENV === "docker" ? "mysql" : config.DB_HOST,
-    port: config.DB_PORT,
-    user: config.DB_USERNAME,
-    password: config.DB_PASSWORD,
-    database: config.DB_NAME,
+    host: process.env.NODE_ENV === "docker" ? "db-app" : config.MYSQL_HOST,
+    port: config.MYSQL_PORT,
+    user: config.MYSQL_USER,
+    password: config.MYSQL_PASSWORD,
+    database: config.MYSQL_DATABASE,
     namedPlaceholders: true,
     promise: true,
     connectionLimit: 100,
