@@ -1,8 +1,7 @@
 import axios from "axios";
 import { Task } from "../components/Task";
 
-const env = import.meta.env;
-const apiUrl = env.HTTP_PROTOCOL + env.HTTP_HOST + ":" + env.HTTP_PORT;
+const apiUrl = import.meta.env.API_DOMAIN;
 const taskEndPoint = apiUrl + "/task";
 
 export function getTasks() {
@@ -18,5 +17,5 @@ export function updateTask(data: Task | { id: number; completed: boolean }) {
 }
 
 export function addNewTask(data: Task) {
-  return axios.put(`${taskEndPoint}/${data.id}`, data);
+  return axios.put(`${taskEndPoint}`, data);
 }

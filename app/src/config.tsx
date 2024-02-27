@@ -1,29 +1,26 @@
 import ThirdPartyEmailPassword, {
+  ActiveDirectory,
+  Apple,
   Google,
   LinkedIn,
-  Apple,
-  ActiveDirectory,
 } from "supertokens-auth-react/recipe/thirdpartyemailpassword";
 import { ThirdPartyEmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe/thirdpartyemailpassword/prebuiltui";
 import Session from "supertokens-auth-react/recipe/session";
 
 export function getApiDomain() {
-  const apiPort = import.meta.env.VITE_APP_API_PORT || 3001;
-  const apiUrl =
-    import.meta.env.VITE_APP_API_URL || `http://localhost:${apiPort}`;
-  return apiUrl;
+  const apiPort = import.meta.env.API_PORT || 3001;
+  const apiHost = import.meta.env.API_HOST || "127.0.0.1";
+  return `https://${apiHost}:${apiPort}`;
 }
 
 export function getWebsiteDomain() {
-  const websitePort = import.meta.env.VITE_APP_WEBSITE_PORT || 3000;
-  const websiteUrl =
-    import.meta.env.VITE_APP_WEBSITE_URL || `http://localhost:${websitePort}`;
-  return websiteUrl;
+  const websitePort = import.meta.env.APP_PORT || 3000;
+  return import.meta.env.APP_DOMAIN || `http://127.0.0.1:${websitePort}`;
 }
 
 export const SuperTokensConfig = {
   appInfo: {
-    appName: import.meta.env.SUPERTOKENS_APPNAME,
+    appName: import.meta.env.APP_NAME,
     apiDomain: getApiDomain(),
     websiteDomain: getWebsiteDomain(),
   },
