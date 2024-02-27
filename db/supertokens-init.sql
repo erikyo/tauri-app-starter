@@ -1,5 +1,5 @@
 -- Create supertokens database
-CREATE DATABASE supertokens;
+CREATE DATABASE IF NOT EXISTS supertokens;
 
 CREATE TABLE `apps` (
   `app_id` varchar(64) NOT NULL DEFAULT 'public',
