@@ -8,10 +8,18 @@ import db from "./adapters/mysql.js";
 
 import routes from "./routes/index.js";
 import todoRoutes from "./routes/todo.js";
+import fs from "fs";
+import path from "node:path";
 
 export default async function appFramework(): Promise<FastifyInstance> {
   return (
-    Fastify({ logger: true })
+    Fastify({
+      https: {
+        key: fs.readFileSync(path.resolve("ssl/fastify.key")),
+        cert: fs.readFileSync(path.resolve("ssl/fastify.crt")),
+      },
+      logger: true,
+    })
       .register(config)
       .register(auth)
       .register(db)
