@@ -6,15 +6,15 @@ import {
 } from "@fastify/mysql";
 
 type ENV = {
-  DB_HOST: string;
-  DB_PORT: number;
-  DB_USERNAME: string;
-  DB_PASSWORD: string;
-  DB_NAME: string;
+  MYSQL_HOST: string;
+  MYSQL_PORT: number;
+  MYSQL_USER: string;
+  MYSQL_PASSWORD: string;
+  MYSQL_DATABASE: string;
   DB_SOCKET: string;
-  HTTP_PORT: number;
-  HTTP_HOST: string;
-  CORS_ORIGIN_URL: string;
+  API_PORT: number;
+  API_HOST: string;
+  APP_DOMAIN: string;
 };
 
 /**

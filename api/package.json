@@ -3,9 +3,11 @@
   "version": "1.0.0",
   "description": "api",
   "scripts": {
-    "start": "nodemon -e ts -x npm run watch:serve",
-    "watch:serve": "node --loader ts-node/esm src/server.ts",
-    "start:debug": "DEBUG=com.supertokens* npm run start",
+    "start": "set NODE_ENV=development && nodemon -e ts -x npm run watch:serve",
+    "start:debug": "set DEBUG=com.supertokens* && npm run start",
+    "watch:serve": "node --loader ts-node/esm src/server.ts ",
+    "build": "tsc src/server.ts --outDir lib --module node16",
+    "serve": "node lib/server.js",
     "doc": "npm run prepare",
     "test": "jest --coverage"
   },
@@ -27,7 +29,6 @@
     "supertokens-node": "^16.6.4"
   },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.23.3",
     "@jest/globals": "^29.7.0",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.20",
