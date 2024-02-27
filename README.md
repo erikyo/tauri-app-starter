@@ -24,7 +24,7 @@ Download the latest version of Node.js from [here](https://nodejs.org/en/downloa
 ## Run the app
 
 ```bash 
-  npm run start
+  docker-compose up
 ```
 
 ##### CORE

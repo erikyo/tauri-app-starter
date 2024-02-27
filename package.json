@@ -2,8 +2,12 @@
   "name": "tauri-app-starter",
   "version": "0.0.1",
   "description": "",
+  "keywords": [],
+  "author": "Erik Golinelli",
+  "license": "ISC",
   "scripts": {
-    "start": "docker-compose --env-file .env up -d api",
+    "start": "docker-compose up",
+    "force-reload": "docker compose restart",
     "poststart": "npm run start:frontend",
     "down": "docker-compose down",
     "start:app": "docker-compose up -d && npm run start:frontend-app",
@@ -23,9 +27,6 @@
 
     "prepare": "husky"
   },
-  "keywords": [],
-  "author": "Erik Golinelli",
-  "license": "ISC",
   "dependencies": {
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "eslint": "^8.56.0",
