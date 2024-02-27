@@ -1,5 +1,5 @@
 import { FastifyReply } from "fastify";
-import { ResponseInterface } from "../model/types.js";
+import { ResponseInterface } from "./types.js";
 
 const reply = async (
   replyponseData: ResponseInterface,

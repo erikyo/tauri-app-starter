@@ -1,12 +1,12 @@
 import { FastifyReply } from "fastify";
 import parseResponse from "./response.js";
 import errorHandler from "./error.js";
-import { ResponseInterface } from "../model/types.js";
 import { verifySession } from "supertokens-node/lib/build/recipe/session/framework/fastify.js";
+import { ResponseInterface } from "./types.js";
 
-export const sessionHandler = verifySession({
-  sessionRequired: process.env.NODE_ENV === "production",
-});
+export const sessionHandler = (_req, _res, done) => {
+  process.env.NODE_ENV === "production" ? verifySession() : done();
+};
 
 export const responseSender = async (
   data: ResponseInterface,

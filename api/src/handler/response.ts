@@ -2,7 +2,7 @@ import {
   ErrorInterface,
   ResponseInterface,
   SuccessInterface,
-} from "../model/types.js";
+} from "./types.js";
 import { ApiError } from "../schema/error.schema.js";
 
 const setFormatError = (code: number, message: string): ErrorInterface => {
