@@ -1,11 +1,14 @@
 import { SwaggerOptions } from "@fastify/swagger";
 
-const apiServerUrl =
-  "http://" + process.env.HTTP_HOST + ":" + process.env.HTTP_PORT;
+const apiServerUrl = process.env.API_DOMAIN;
 
 export const schema = {
   swagger: {
     openapi: "3.0.1",
+    api_path: "/",
+    api_version: "0.1",
+    is_authenticated: false,
+    is_superuser: false,
     info: {
       title: "A TODO-Task list application",
       description: "A simple application to handle tasks.",
@@ -27,7 +30,6 @@ export const schema = {
         description: "Task management",
       },
     ],
-    routePrefix: "/api/v1",
     paths: {
       routePrefix: "/api/v1",
       "/": {
@@ -35,6 +37,36 @@ export const schema = {
           tags: ["system"],
           summary: "Check the server status",
           operationId: "serverStatus",
+          responses: {
+            "200": {
+              description: "Server status response",
+            },
+            default: {
+              description: "Generic error response",
+            },
+          },
+        },
+      },
+      "/auth": {
+        get: {
+          tags: ["system"],
+          summary: "test auth endpoint",
+          operationId: "authStatus",
+          responses: {
+            "200": {
+              description: "Server status response",
+            },
+            default: {
+              description: "Generic error response",
+            },
+          },
+        },
+      },
+      "/getJWT": {
+        get: {
+          tags: ["system"],
+          summary: "test jwt token",
+          operationId: "authStatus",
           responses: {
             "200": {
               description: "Server status response",
@@ -207,9 +239,10 @@ export const schema = {
     },
     components: {
       securitySchemes: {
-        bearerAuth: {
-          type: "http",
-          scheme: "bearer",
+        api_key: {
+          type: "apiKey",
+          in: "header",
+          name: "Authorization",
         },
         openId: {
           type: "openIdConnect",
@@ -219,7 +252,7 @@ export const schema = {
           type: "oauth2",
           flows: {
             authorizationCode: {
-              authorizationUrl: apiServerUrl + "/authorize",
+              authorizationUrl: apiServerUrl + "/auth",
               tokenUrl: apiServerUrl + "/oauth/token",
               scopes: {
                 admin:
