@@ -35,28 +35,39 @@ export default function Tasks() {
   }, []);
 
   function addTask(props: Task) {
-    const query =
-      "id" in props && typeof props.id === "number"
-        ? updateTask(props)
-        : addNewTask(props);
-
-    query
-      .then((resp) => {
-        if (resp && resp) {
-          // find the task with the same id and replace it
-          const newTasks = tasks.map((task) => {
-            if (task.id === props.id) {
-              return props;
-            }
-            return task;
-          });
-          setTasks(newTasks);
-          resetTask();
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    if ("id" in props && typeof props.id === "number") {
+      updateTask(props)
+        .then((resp) => {
+          if (resp) {
+            // find the task with the same id and replace it
+            const newTasks = tasks.map((task) => {
+              if (task.id === props.id) {
+                return props;
+              }
+              return task;
+            });
+            setTasks(newTasks);
+            resetTask();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    } else {
+      addNewTask(props)
+        .then((resp) => {
+          if (resp) {
+            const newTask = { ...props, id: resp };
+            // find the task with the same id and replace it
+            const newTasks = [...tasks, newTask] as Task[];
+            setTasks(newTasks);
+            resetTask();
+          }
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    }
   }
 
   function removeTask(id: number) {
