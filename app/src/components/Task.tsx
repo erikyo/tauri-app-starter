@@ -24,17 +24,13 @@ export function Task({
     <li className="todo-item py-4">
       <div className="flex items-center group">
         <input
-          id="completed"
           name="completed"
           type="checkbox"
           checked={task.completed}
           onChange={handleChange}
           className="h-4 w-4 text-teal-600 focus:ring-teal-500 border-gray-300 rounded"
         />
-        <label
-          htmlFor="todo1"
-          className="ml-3 block items-center text-gray-900"
-        >
+        <label className="ml-3 block items-center text-gray-900">
           <span className="text-lg font-medium">{task.task_name}</span>
           <span className="ml-3 text-sm font-light text-gray-500">
             {task.task_content}

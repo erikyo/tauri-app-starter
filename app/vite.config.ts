@@ -1,9 +1,10 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import basicSsl from "@vitejs/plugin-basic-ssl";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [react()],
+  plugins: [react(), basicSsl()],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //
@@ -13,11 +14,11 @@ export default defineConfig(async () => ({
   server: {
     port: 3000,
     strictPort: true,
+    host: true,
     watch: {
       // 3. tell vite to ignore watching `src-tauri`
       ignored: ["**/src-tauri/**"],
     },
   },
-  envDir: "../",
-  envPrefix: ["HTTP_", "SUPERTOKENS_APPNAME"],
+  envPrefix: ["APP_", "API_", "NODE_", "TAURI_"],
 }));
