@@ -12,8 +12,8 @@ import Dashboard from "supertokens-node/recipe/dashboard/index.js";
 import ThirdPartyEmailPassword from "supertokens-node/recipe/thirdpartyemailpassword/index.js";
 
 import {
-  plugin,
   errorHandler,
+  plugin,
 } from "supertokens-node/framework/fastify/index.js";
 
 import { type TypeInput } from "supertokens-node/types";
@@ -80,16 +80,19 @@ async function auth(server, options) {
     framework: "fastify",
     supertokens: {
       // These are the connection details of the app you created on supertokens.com
-      connectionURI: server.config.SUPERTOKENS_CONNECTION_URI,
+      connectionURI:
+        process.env.NODE_ENV === "docker"
+          ? "http://supertokens:3567"
+          : server.config.SUPERTOKENS_CONNECTION_URI,
       apiKey: server.config.SUPERTOKENS_API_KEY,
     },
     appInfo: {
       // learn more about this on https://supertokens.com/docs/session/appinfo
-      appName: server.config.SUPERTOKENS_APPNAME,
-      apiDomain: server.config.SUPERTOKENS_API_DOMAIN,
-      websiteDomain: server.config.SUPERTOKENS_WEBSITE_DOMAIN,
+      appName: server.config.APP_NAME,
+      apiDomain: server.config.API_DOMAIN,
+      websiteDomain: server.config.APP_DOMAIN,
       apiBasePath: server.config.SUPERTOKENS_API_BASE_PATH,
-      websiteBasePath: server.config.SUPERTOKENS_WEBSITE_BASE_PATH,
+      websiteBasePath: "/auth",
     },
     recipeList: recipes,
   };
@@ -100,7 +103,7 @@ async function auth(server, options) {
 
   // we register a CORS route to allow requests from the frontend
   server.register(cors, {
-    origin: server.config.SUPERTOKENS_WEBSITE_DOMAIN,
+    origin: server.config.APP_DOMAIN,
     allowedHeaders: ["content-type", ...supertokens.getAllCORSHeaders()],
     methods: ["GET", "HEAD", "PUT", "PATCH", "POST", "DELETE"],
     credentials: true,
