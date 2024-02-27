@@ -5,84 +5,83 @@ import { FastifyInstance } from "fastify";
 export const schema = {
   type: "object",
   required: [
-    "DB_HOST",
-    "DB_PORT",
-    "DB_USERNAME",
-    "DB_PASSWORD",
-    "DB_NAME",
+    "MYSQL_HOST",
+    "MYSQL_PORT",
+    "MYSQL_USER",
+    "MYSQL_PASSWORD",
+    "MYSQL_DATABASE",
 
-    "HTTP_HOST",
-    "HTTP_PORT",
+    "API_DOMAIN",
+    "API_HOST",
+    "API_PORT",
 
+    "APP_NAME",
     "SUPERTOKENS_CONNECTION_URI",
     "SUPERTOKENS_API_KEY",
-    "SUPERTOKENS_APPNAME",
-    "SUPERTOKENS_API_DOMAIN",
     "SUPERTOKENS_API_BASE_PATH",
-    "SUPERTOKENS_WEBSITE_DOMAIN",
-    "SUPERTOKENS_WEBSITE_BASE_PATH",
+
+    "APP_DOMAIN",
   ],
   properties: {
-    DB_HOST: {
+    MYSQL_HOST: {
       type: "string",
-      default: "0.0.0.0",
     },
-    DB_PORT: {
+    MYSQL_PORT: {
       type: "number",
       default: 3306,
     },
-    DB_USERNAME: {
+    MYSQL_USER: {
       type: "string",
     },
-    DB_PASSWORD: {
+    MYSQL_PASSWORD: {
       type: "string",
     },
-    DB_NAME: {
+    MYSQL_DATABASE: {
       type: "string",
     },
 
-    HTTP_PORT: {
+    API_DOMAIN: {
+      type: "string",
+    },
+    API_HOST: {
+      type: "string",
+    },
+    API_PORT: {
       type: "number",
       default: 3001,
     },
-    HTTP_HOST: {
-      type: "string",
-      default: "0.0.0.0",
-    },
 
-    SUPERTOKENS_CONNECTION_URI: {
+    APP_NAME: {
       type: "string",
     },
     SUPERTOKENS_API_KEY: {
       type: "string",
     },
-    SUPERTOKENS_APPNAME: {
-      type: "string",
-    },
-    SUPERTOKENS_API_DOMAIN: {
+    SUPERTOKENS_CONNECTION_URI: {
       type: "string",
     },
     SUPERTOKENS_API_BASE_PATH: {
       type: "string",
     },
-    SUPERTOKENS_WEBSITE_DOMAIN: {
+
+    APP_DOMAIN: {
       type: "string",
     },
-    SUPERTOKENS_WEBSITE_BASE_PATH: {
-      type: "string",
-    },
+
     SUPERTOKENS_3RD_PARTY_GOOGLE_CLIENT_ID: {
       type: "string",
     },
     SUPERTOKENS_3RD_PARTY_GOOGLE_CLIENT_SECRET: {
       type: "string",
     },
+
     SUPERTOKENS_3RD_PARTY_GITHUB_CLIENT_ID: {
       type: "string",
     },
     SUPERTOKENS_3RD_PARTY_GITHUB_CLIENT_SECRET: {
       type: "string",
     },
+
     SUPERTOKENS_3RD_PARTY_APPLE_CLIENT_ID: {
       type: "string",
     },
