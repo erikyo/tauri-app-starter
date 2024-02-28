@@ -1,26 +1,14 @@
 # Use an official Node.js runtime as a parent image
 FROM node:lts-bullseye-slim
 
-WORKDIR /usr/src/api
+WORKDIR /usr/src/api/
 
-# copy the .env file
-COPY .env .
-
-# copy the src folder
-COPY ./api/src/ ./src/
-
-# copy the src folder
+# copy the package.json and package-lock.json files to the working folder
 COPY ./api/*.json ./
-
-# SSL
-RUN mkdir ssl
 
 # Install OpenSSL
 RUN apt update
 RUN apt install -y openssl
-
-# Generate SSL
-RUN openssl req -x509 -sha256 -nodes -keyout ssl/fastify.key -out ssl/fastify.crt -sha256 -days 3650 -newkey rsa:2048 -subj "/C=XX/ST=StateName/L=CityName/O=CompanyName/OU=CompanySectionName/CN=127.0.0.1"
 
 # Install app dependencies
 RUN npm ci
@@ -31,4 +19,7 @@ ENV ACTION="start"
 # Set the value of ACTION based on NODE_ENV
 CMD if [ "$NODE_ENV" = "test" ]; \
     then export ACTION="test"; \
-    fi && npm run $ACTION
+    fi && rm -rf ssl \
+    && mkdir -p ssl \
+    && openssl req -new -x509 -nodes -out ssl/fastify.crt -keyout ssl/fastify.key -days 30 -extensions v3_req -subj "/keyUsage=critical,digitalSignature/extendedKeyUsage=serverAuth/C=CA/ST=QC/O=App/CN=localhost/subjectAltName=DNS:*.localhost,IP:127.0.0.1" \
+    && npm run $ACTION

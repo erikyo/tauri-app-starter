@@ -8,7 +8,6 @@
   "scripts": {
     "start": "docker-compose up",
     "force-reload": "docker compose restart",
-    "poststart": "npm run start:frontend",
     "down": "docker-compose down",
     "start:app": "docker-compose up -d && npm run start:frontend-app",
     "tests": "docker compose --env-file .env.test up",

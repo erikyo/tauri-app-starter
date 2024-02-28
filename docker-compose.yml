@@ -32,7 +32,7 @@ services:
     expose:
       - "3567"
     environment:
-      MYSQL_CONNECTION_URI: mysql://user:pass@db-supertokens/supertokens
+      MYSQL_CONNECTION_URI: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db-supertokens/supertokens
     healthcheck:
       test: >
         bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
@@ -72,17 +72,19 @@ services:
       - 3002:8080
 
   api:
+    image: lts-bullseye-slim
     build:
       context: .
       dockerfile: Dockerfile
+    volumes:
+      - ./api:/usr/src/api/
     env_file:
       - .env
     environment:
+      ENV NODE_TLS_REJECT_UNAUTHORIZED: "0"
       NODE_ENV: docker
     ports:
       - "${API_PORT}:${API_PORT}"
-    volumes:
-      - ./api:/usr/src/api
     depends_on:
       db-app:
         condition: service_healthy
@@ -90,10 +92,14 @@ services:
         condition: service_healthy
 
   app:
-    image: node:latest
+    image: lts-bullseye-slim
     working_dir: /usr/src/app
     env_file:
       - .env
+    environment:
+      ENV NODE_TLS_REJECT_UNAUTHORIZED: "0"
+    volumes:
+      - ./app:/usr/src/app
     command: >
       /bin/bash -c "
       npm install &&
@@ -102,8 +108,6 @@ services:
       "
     ports:
       - "${APP_PORT}:${APP_PORT}"
-    volumes:
-      - ./app:/usr/src/app
     depends_on:
       - api
 
