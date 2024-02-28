@@ -8,9 +8,7 @@ import { ThirdPartyEmailPasswordPreBuiltUI } from "supertokens-auth-react/recipe
 import Session from "supertokens-auth-react/recipe/session";
 
 export function getApiDomain() {
-  const apiPort = import.meta.env.API_PORT || 3001;
-  const apiHost = import.meta.env.API_HOST || "127.0.0.1";
-  return `https://${apiHost}:${apiPort}`;
+  return import.meta.env.API_DOMAIN || "http://127.0.0.1:3001";
 }
 
 export function getWebsiteDomain() {

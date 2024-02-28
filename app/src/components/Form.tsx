@@ -1,4 +1,5 @@
 import { Task } from "./Task.tsx";
+import {useIntl} from "react-intl";
 
 export function Form({
   task,
@@ -9,6 +10,7 @@ export function Form({
   setTask: (value: ((prevState: Task) => Task) | Task) => void;
   addTask: (props: Task) => void;
 }) {
+    const intl = useIntl();
   return (
     <>
       <form className="w-full mx-auto px-4 py-2">
@@ -34,7 +36,7 @@ export function Form({
           type="button"
           onClick={() => addTask(task)}
         >
-          Add Task
+            {intl.formatMessage({id: 'form.btn'}, {name: 'Add Task'})}
         </button>
       </form>
     </>
