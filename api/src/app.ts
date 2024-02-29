@@ -14,10 +14,6 @@ import path from "node:path";
 export default async function appFramework(): Promise<FastifyInstance> {
   return (
     Fastify({
-      https: {
-        key: fs.readFileSync(path.resolve("ssl/fastify.key")),
-        cert: fs.readFileSync(path.resolve("ssl/fastify.crt")),
-      },
       logger: true,
     })
       .register(config)
