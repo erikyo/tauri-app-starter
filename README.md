@@ -65,7 +65,7 @@ npm run tests
 Normally isn't required, you nee it to rebuild containers after a docker configuration change
 
 ```bash
-npm run build-app
+npm run force-reload
 ```
 
 #### Down
