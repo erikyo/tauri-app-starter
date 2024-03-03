@@ -73,16 +73,16 @@ npm run build-app
 Shut down the current docker container
 
 ```bash
-npm run build-app
+npm run down
 ```
 
 ## Publishing the app
 
 In order to release the app you need to copy the env file and name it `.env.production`. Then edit that file using the production ip, ports, secrets and run 
 
-`
+```bash
 npm run build-app
-`
+```
 
 That's it!🎉 Tauri will build the Windows/Linux/MacOs app following the configuration located in [tauri.conf.json](https://github.com/erikyo/tauri-app-starter/blob/master/app/src-tauri/tauri.conf.json)
 
