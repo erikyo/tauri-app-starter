@@ -16,7 +16,7 @@
     "build:backend": "cd api && npm run build",
     "build:frontend": "cd app && npm run tauri",
     "build-app": "npx npm-run-all --parallel build:frontend build:backend",
-    "tests": "docker-compose --env-file .env.test --file docker-compose.test.yml up -d",
+    "tests": "docker-compose --env-file .env.test --file docker-compose.test.yml up -d --no-deps --build",
     "posttests": "set NODE_ENV=test&& npm-run-all --parallel tests:backend tests:frontend",
     "tests:backend": "set NODE_ENV=test&& cd api && npm test",
     "tests:frontend": "set NODE_ENV=test&& cd app && npm test",
