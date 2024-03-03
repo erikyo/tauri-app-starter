@@ -1,0 +1,6 @@
+{
+  "extends": "fastify-tsconfig",
+  "compilerOptions": {
+    "lib": [ "es2021", "dom", "node" ],
+  },
+}

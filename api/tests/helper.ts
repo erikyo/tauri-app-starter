@@ -6,22 +6,14 @@ import * as dotenv from "dotenv";
 import path from "node:path";
 
 // Automatically build and tear down our instance
-export function boostrap() {
+export async function boostrap(): Promise<FastifyInstance> {
   let app: FastifyInstance;
   // fastify-plugin ensures that all decorators
   // are exposed for testing purposes, this is
   // different from the production setup
-
-  beforeAll(async () => {
-    dotenv.config({ path: path.resolve("../.env.test") });
-    app = await fastify();
-    await app.listen();
-    return app;
-  });
-
-  afterAll(async () => {
-    return await app.close();
-  });
-
+  process.env.NODE_ENV = "test";
+  dotenv.config({ path: path.resolve("../.env.test") });
+  app = await fastify();
+  await app.listen();
   return app;
 }
