@@ -1,6 +1,7 @@
 import appFramework from "./app.js";
 import { FastifyInstance } from "fastify";
 import { getEnv } from "./utils/index.js";
+import { DOCKER_HOST } from "./constants.js";
 
 async function serve() {
   getEnv();
@@ -12,7 +13,9 @@ async function serve() {
   return await app
     .listen({
       port: app.config.API_PORT,
-      host: process.env.NODE_ENV !== "docker" ? app.config.API_HOST : "0.0.0.0",
+      host: ["docker", "test"].includes(process.env.NODE_ENV)
+        ? DOCKER_HOST
+        : app.config.API_HOST,
     })
     .catch((error) => {
       app.log.error(error);

@@ -8,8 +8,6 @@ import db from "./adapters/mysql.js";
 
 import routes from "./routes/index.js";
 import todoRoutes from "./routes/todo.js";
-import fs from "fs";
-import path from "node:path";
 
 export default async function appFramework(): Promise<FastifyInstance> {
   return (
