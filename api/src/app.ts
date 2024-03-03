@@ -12,7 +12,7 @@ import todoRoutes from "./routes/todo.js";
 export default async function appFramework(): Promise<FastifyInstance> {
   return (
     Fastify({
-      logger: true,
+      logger: ["docker"].includes(process.env.NODE_ENV),
     })
       .register(config)
       .register(auth)

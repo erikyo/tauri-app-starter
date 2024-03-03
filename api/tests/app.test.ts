@@ -3,13 +3,10 @@ import { beforeAll } from "@jest/globals";
 
 describe("root tests", () => {
   let app: any;
+  let taskCount: number = 0;
   beforeAll(async () => {
     app = await boostrap();
     return app;
-  });
-
-  afterAll(async () => {
-    return await app.close();
   });
 
   test("server is alive", () => {
@@ -26,8 +23,29 @@ describe("root tests", () => {
       .inject({ method: "GET", url: "/task" })
       .then((res: { statusCode: any; payload: any }) => {
         expect(res.statusCode).toBe(200);
-        const taskCount = res.payload.length;
+        taskCount = res.payload.length;
         expect(taskCount).toBeTruthy();
+      });
+  });
+
+  test("add a todo", () => {
+    app
+      .inject({
+        method: "PUT",
+        url: "/task",
+        payload: { task_name: "test1", task_content: "test content" },
+      })
+      .then((res: { statusCode: any; payload: any }) => {
+        expect(res.statusCode).toBe(200);
+        expect(res.payload).toBeTruthy();
+        taskCount = res.payload;
+      });
+
+    app
+      .inject({ method: "GET", url: "/task" })
+      .then((res: { statusCode: any; payload: any }) => {
+        expect(res.statusCode).toBe(200);
+        expect(res.payload).toBeTruthy();
       });
   });
 });
