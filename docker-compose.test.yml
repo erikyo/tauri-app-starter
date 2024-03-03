@@ -67,14 +67,6 @@ services:
       timeout: 5s
       retries: 10
 
-  adminer:
-    image: adminer
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
-    ports:
-      - 3002:8080
-
   api:
     image: lts-bullseye-slim
     build:
@@ -83,7 +75,7 @@ services:
     volumes:
       - ./api:/usr/src/api/
     env_file:
-      - .env
+      - .env.test
     environment:
       ENV NODE_TLS_REJECT_UNAUTHORIZED: "0"
       NODE_ENV: docker
@@ -99,7 +91,7 @@ services:
     image: lts-bullseye-slim
     working_dir: /usr/src/app
     env_file:
-      - .env
+      - .env.test
     environment:
       ENV NODE_TLS_REJECT_UNAUTHORIZED: "0"
     volumes:
