@@ -42,42 +42,52 @@ Download the latest version of Docker Desktop from [here](https://www.docker.com
 
 Download the latest version of Node.js from [here](https://nodejs.org/en/download/)
 
-### How to use
+## How to use
 
-## Run the app
+#### Run the app
+
+starts the app in development mode
 
 ```bash 
-  docker-compose up
+npm run start
 ```
 
-##### CORE
-This app relies on the authentication method RBAC so you need first to start the  
+#### Run the tests
 
-- The above command will start the container with an in-memory database.
+Will run the test suite
+
+```bash 
+npm run tests
+```
+
+#### Re-build 
+
+Normally isn't required, you nee it to rebuild containers after a docker configuration change
 
 ```bash
-docker run -p 3567:3567 -d registry.supertokens.io/supertokens/supertokens-mysql:7.0
+npm run build-app
 ```
-**NOTE**: refer to this documentation to start the server without Docker https://supertokens.com/docs/thirdpartypasswordless/custom-ui/init/core/without-docker
 
-#### API Server 
+#### Down
 
-- Start the Api server with the command
+Shut down the current docker container
 
 ```bash
-  npm run start:backend
+npm run build-app
 ```
 
-#### UI 
+## Publishing the app
 
-- Start the UI server with the command
+In order to release the app you need to copy the env file and name it `.env.production`. Then edit that file using the production ip, ports, secrets and run 
 
-```bash
-  npm run start:frontend
-```
+`
+npm run build-app
+`
 
-## Build the app
+That's it!🎉 Tauri will build the Windows/Linux/MacOs app following the configuration located in [tauri.conf.json](https://github.com/erikyo/tauri-app-starter/blob/master/app/src-tauri/tauri.conf.json)
 
-```bash
-  npm run build-app
-```
+## Contributions
+
+Contributions are welcome! If you encounter any issues or have suggestions for improvements, please open an issue or submit a pull request.
+
+
