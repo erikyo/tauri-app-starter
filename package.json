@@ -7,6 +7,7 @@
   "license": "ISC",
   "scripts": {
     "start": "docker-compose --env-file .env up -d",
+    "rebuild": "docker-compose --env-file .env up -d --no-deps --build",
     "force-reload": "docker compose restart",
     "down": "set COMPOSE_ENV_FILES=.env&&docker-compose down -v",
     "start:backend": "cd api && npm run start",
