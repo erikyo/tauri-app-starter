@@ -10,7 +10,7 @@
       "files": [
         "tests/**/*"
       ],
-      "plugins": ["jest"],
+      "plugins": ["jest", "jest/globals", "node/node-builtins"],
       "env": {
         "jest/globals": true
       }
