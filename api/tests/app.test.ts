@@ -1,9 +1,10 @@
 import { boostrap } from "./helper.js";
-import { beforeAll } from "@jest/globals";
+import { describe, expect, test, beforeAll } from "vitest";
 
 describe("root tests", () => {
   let app: any;
   let taskCount: number = 0;
+
   beforeAll(async () => {
     app = await boostrap();
     return app;
@@ -20,11 +21,11 @@ describe("root tests", () => {
 
   test("get the list of todos ", () => {
     app
-      .inject({ method: "GET", url: "/task" })
+      .inject({ method: "GET", url: "/shipment" })
       .then((res: { statusCode: any; payload: any }) => {
         expect(res.statusCode).toBe(200);
-        taskCount = res.payload.length;
-        expect(taskCount).toBeTruthy();
+        shipmentCount = res.payload.length;
+        expect(shipmentCount).toBeTruthy();
       });
   });
 
@@ -32,17 +33,17 @@ describe("root tests", () => {
     app
       .inject({
         method: "PUT",
-        url: "/task",
-        payload: { task_name: "test1", task_content: "test content" },
+        url: "/shipment",
+        payload: { shipment_name: "test1", shipment_content: "test content" },
       })
       .then((res: { statusCode: any; payload: any }) => {
         expect(res.statusCode).toBe(200);
         expect(res.payload).toBeTruthy();
-        taskCount = res.payload;
+        shipmentCount = res.payload;
       });
 
     app
-      .inject({ method: "GET", url: "/task" })
+      .inject({ method: "GET", url: "/shipment" })
       .then((res: { statusCode: any; payload: any }) => {
         expect(res.statusCode).toBe(200);
         expect(res.payload).toBeTruthy();

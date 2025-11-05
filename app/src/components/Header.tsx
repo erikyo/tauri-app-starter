@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { signOut } from "supertokens-auth-react/recipe/thirdpartyemailpassword";
+import { signOut } from "supertokens-auth-react/recipe/thirdparty";
 import { useCallback } from "react";
 export function Header() {
   const onLogout = useCallback(() => {
@@ -12,7 +12,7 @@ export function Header() {
     <div className="flex flex-col items-center justify-center">
       <div className={"flex self-end mb-2 text-xs font-bold"}>
         <Link
-          to={import.meta.env.API_DOMAIN + "/auth/dashboard"}
+          to={`${import.meta.env.API_DOMAIN}/auth/dashboard`}
           className={
             "btn bg-teal-500 hover:bg-teal-700 border-teal-500 hover:border-teal-700 text-sm border-4 text-white my-2 mr-3 p-1 rounded-full"
           }

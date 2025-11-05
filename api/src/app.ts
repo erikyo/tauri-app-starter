@@ -1,4 +1,4 @@
-import Fastify, { type FastifyInstance } from "fastify";
+import Fastify, {type FastifyInstance} from "fastify";
 
 import config from "./plugins/config.js";
 import auth from "./plugins/auth.js";
@@ -25,5 +25,5 @@ export default async function appFramework(): Promise<FastifyInstance> {
       .register(swaggerUi)
 
       .ready()
-  );
+  ) as FastifyInstance;
 }

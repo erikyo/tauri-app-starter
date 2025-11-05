@@ -1,5 +1,5 @@
 import appFramework from "./app.js";
-import { FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { getEnv } from "./utils/index.js";
 import { DOCKER_HOST } from "./constants.js";
 
