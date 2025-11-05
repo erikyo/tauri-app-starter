@@ -1,5 +1,5 @@
 # Use an official Node.js runtime as a parent image
-FROM node:lts-bullseye-slim
+FROM node:lts-slim
 
 WORKDIR /usr/src/api/
 

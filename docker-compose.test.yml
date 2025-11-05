@@ -1,5 +1,3 @@
-version: '3'
-
 services:
   db-supertokens:
     image: mysql:latest
@@ -12,9 +10,9 @@ services:
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     restart: always
     ports:
-      - "${SUPERTOKENS_MYSQL_PORT}:3306"
+      - "${SUPERTOKENS_DB_PORT}:3306"
     expose:
-      - "${SUPERTOKENS_MYSQL_PORT}"
+      - "${SUPERTOKENS_DB_PORT}"
     volumes:
       - supertokens_data:/var/lib/mysql-supertokens
       - ./db/supertokens-init.sql:/docker-entrypoint-initdb.d/supertokens-init.sql
