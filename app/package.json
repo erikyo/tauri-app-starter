@@ -26,7 +26,7 @@
     "supertokens-auth-react": "^0.50.0"
   },
   "devDependencies": {
-    "@biomejs/biome": "^1.8.3",
+    "@biomejs/biome": "2.3.5",
     "@tauri-apps/cli": "^1.6.0",
     "@testing-library/react": "^16.0.0",
     "@testing-library/user-event": "^14.5.2",
