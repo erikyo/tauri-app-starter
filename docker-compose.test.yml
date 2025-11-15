@@ -1,91 +1,107 @@
 services:
   db-supertokens:
-    image: mysql:latest
+    image: 'postgres:latest'
     container_name: db-supertokens
-    command: --default-authentication-plugin=mysql_native_password
     environment:
-      MYSQL_ROOT_PASSWORD: root
-      MYSQL_USER: ${MYSQL_USER}
-      MYSQL_DATABASE: ${SUPERTOKENS_DATABASE}
-      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-    restart: always
+      POSTGRES_ROOT_PASSWORD: root
+      POSTGRES_USER: ${SUPERTOKENS_USER}
+      POSTGRES_PASSWORD: ${MYSQL_PASSWORD}
+      POSTGRES_DATABASE: ${SUPERTOKENS_DATABASE}
     ports:
-      - "${SUPERTOKENS_DB_PORT}:3306"
+      - "${SUPERTOKENS_DB_PORT}:5432"
     expose:
       - "${SUPERTOKENS_DB_PORT}"
     volumes:
       - supertokens_data:/var/lib/mysql-supertokens
       - ./db/supertokens-init.sql:/docker-entrypoint-initdb.d/supertokens-init.sql
+    networks:
+      - app_network
+    restart: unless-stopped
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: ['CMD', 'pg_isready', '-U', 'supertokens_user', '-d', 'supertokens']
       interval: 5s
       timeout: 5s
-      retries: 10
+      retries: 5
 
   supertokens:
-    image: registry.supertokens.io/supertokens/supertokens-mysql:7.0
+    image: registry.supertokens.io/supertokens/supertokens-postgresql:latest
     depends_on:
       db-supertokens:
         condition: service_healthy
     ports:
       - "3567:3567"
-    expose:
-      - "3567"
     environment:
-      MYSQL_CONNECTION_URI: mysql://${MYSQL_USER}:${MYSQL_PASSWORD}@db-supertokens/supertokens
+      POSTGRESQL_CONNECTION_URI: "postgresql://${SUPERTOKENS_USER}:${MYSQL_PASSWORD}@db-supertokens:5432/${SUPERTOKENS_DATABASE}"
+    networks:
+      - app_network
+    restart: unless-stopped
     healthcheck:
       test: >
         bash -c 'exec 3<>/dev/tcp/127.0.0.1/3567 && echo -e "GET /hello HTTP/1.1\r\nhost: 127.0.0.1:3567\r\nConnection: close\r\n\r\n" >&3 && cat <&3 | grep "Hello"'
-      interval: 5s
+      interval: 10s
       timeout: 5s
-      retries: 10
+      retries: 5
 
   db-app:
     container_name: db-app
+    hostname: db-app
     image: mysql:latest
-    command: --default-authentication-plugin=mysql_native_password
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-      MYSQL_AUTH_PLUGIN: caching_sha2_password
-      MYSQL_ALLOW_EMPTY_PASSWORD: yes
-    restart: always
+    restart: unless-stopped
     ports:
       - "${MYSQL_PORT}:${MYSQL_PORT}"
     expose:
       - "${MYSQL_PORT}"
+    networks:
+      - app_network
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
-      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
       interval: 5s
       timeout: 5s
       retries: 10
 
   adminer:
-    image: adminer
+    image: adminer:standalone
+    container_name: adminer
     restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
+      MYSQL_ROOT_PASSWORD: root
+    networks:
+      - app_network
     ports:
-      - 3002:8080
+      - 4040:8080
 
   api:
-    image: lts-bullseye-slim
-    build:
-      context: .
-      dockerfile: Dockerfile
-    volumes:
-      - ./api:/usr/src/api
+    image: node:lts-slim
+    container_name: api
+    working_dir: /usr/src/api
     env_file:
       - .env.test
     environment:
       NODE_ENV: docker
     ports:
       - "${API_PORT}:${API_PORT}"
+    expose:
+      - "${API_PORT}"
+    networks:
+      - app_network
+    volumes:
+      - ./api:/usr/src/api
+    command: >
+      /bin/bash -c "
+      echo 'Rest-Api is starting... Please Wait' &&
+      npm i &&
+      npm run start"
     depends_on:
       db-app:
         condition: service_healthy
@@ -93,18 +109,20 @@ services:
         condition: service_healthy
 
   app:
-    image: lts-bullseye-slim
+    image: node:lts-slim
+    container_name: app
     working_dir: /usr/src/app
     volumes:
       - ./app:/usr/src/app
     env_file:
       - .env.test
+    expose:
+      - "${APP_PORT}"
     command: >
       /bin/bash -c "
-      npm ci &&
-      npm run build &&
-      npm run dev
-      "
+      echo 'App is starting...' &&
+      npm i &&
+      npm run start"
     ports:
       - "${APP_PORT}:${APP_PORT}"
     depends_on:
@@ -113,3 +131,7 @@ services:
 volumes:
   mysql_data:
   supertokens_data:
+
+networks:
+  app_network:
+    driver: bridge
