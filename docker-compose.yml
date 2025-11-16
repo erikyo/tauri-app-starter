@@ -89,6 +89,7 @@ services:
       - .env
     environment:
       NODE_ENV: docker
+      CHOKIDAR_USEPOLLING: 'true'
     ports:
       - "${API_PORT}:${API_PORT}"
     expose:
@@ -96,7 +97,9 @@ services:
     networks:
       - app_network
     volumes:
-      - ./api:/usr/src/api
+      - type: bind
+        source: ./api
+        target: /usr/src/api
     command: >
       /bin/bash -c "
       echo 'Rest-Api is starting... Please Wait' &&

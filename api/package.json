@@ -7,7 +7,7 @@
   "main": "./lib/server.js",
   "scripts": {
     "start-debug": "set DEBUG=com.supertokens* && npm run start",
-    "start": "set NODE_ENV=development && nodemon --watch ./src --verbose",
+    "start": "set NODE_ENV=development && nodemon",
     "compile": "tsc",
     "serve": "node dist/server.js",
     "lint": "npx @biomejs/biome check --write src",
@@ -44,6 +44,10 @@
     "ignore": [
       "**/test/**"
     ],
+    "watch": [
+      "src/**/*"
+    ],
+    "verbose": true,
     "exec": "npm run compile && npm run serve",
     "delay": 500,
     "ext": "ts js json"
